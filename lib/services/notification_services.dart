@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:feedmovies/screens/message_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class NotificationServices {
@@ -36,7 +38,7 @@ class NotificationServices {
     }
   }
 
-  void initLocalNotifications(
+  void initAndroidLocalNotifications(
       BuildContext context, RemoteMessage message) async {
     var androidInitialization =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -45,7 +47,9 @@ class NotificationServices {
         android: androidInitialization, iOS: iOSInitialization);
 
     await notifications.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (payload) {});
+        onDidReceiveNotificationResponse: (payload) {
+      handleMessage(context, message);
+    });
   }
 
   Future<String> getDeviceToken() async {
@@ -60,9 +64,14 @@ class NotificationServices {
     });
   }
 
-  void firebaseInit() {
+  void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-      showNotification(message);
+      if (Platform.isAndroid) {
+        initAndroidLocalNotifications(context, message);
+        showNotification(message);
+      } else {
+        showNotification(message);
+      }
     });
   }
 
@@ -91,6 +100,32 @@ class NotificationServices {
     Future.delayed(Duration.zero, () {
       notifications.show(0, message.notification!.title.toString(),
           message.notification!.body.toString(), notificationDetails);
+    });
+  }
+
+  void handleMessage(BuildContext context, RemoteMessage message) {
+    if (message.data['type'] == 'msg') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MessageScreen(
+            id: message.data['id'],
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> setupInteractMessage(BuildContext context) async {
+    //when app is terminated
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
+    if(initialMessage != null) {
+      handleMessage(context, initialMessage);
+    }
+    // when app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen((event){
+      handleMessage(context, event);
     });
   }
 }

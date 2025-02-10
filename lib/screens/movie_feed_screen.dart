@@ -16,7 +16,8 @@ class _MovieFeedScreenState extends State<MovieFeedScreen> {
     // TODO: implement initState
     super.initState();
     notificationServices.requestNotificationPermission();
-    notificationServices.firebaseInit();
+    notificationServices.firebaseInit(context);
+    notificationServices.setupInteractMessage(context);
     notificationServices.isTokenRefresh();
     notificationServices.getDeviceToken().then((value) {
       print("token $value");
