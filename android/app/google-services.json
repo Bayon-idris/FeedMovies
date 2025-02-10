@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1085713028423",
+    "project_id": "feedmovies-de25f",
+    "storage_bucket": "feedmovies-de25f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1085713028423:android:a32e6e5b9bbdbe4718e862",
+        "android_client_info": {
+          "package_name": "com.feedmovies.feedmovies"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAUrwlwt6j-T_avz23Myz5cwJK_3vX_hPg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
