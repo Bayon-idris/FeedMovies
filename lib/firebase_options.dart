@@ -65,4 +65,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'feedmovies-de25f.firebasestorage.app',
     iosBundleId: 'com.feedmovies.feedmovies',
   );
+
 }
